@@ -19,6 +19,15 @@ jobs:
         with:
           message: 'Error! No linked issues'
 
+      - uses: nearform/github-action-check-linked-issues@v1
+        id: check-linked-issues
+        with:
+          github-token: ${{ secrets.CROSS_REPO_TOKEN }}
+          exclude-branches: "release/**, dependabot/**"
+      # OPTIONAL: Use the output from the `check-linked-issues` step
+      - name: Get the output
+        run: echo "How many linked issues? ${{ steps.check-linked-issues.outputs.issues }}"
+
       - name: Get issues
         id: get-issues
         uses: mondeja/pr-linked-issues-action@v2

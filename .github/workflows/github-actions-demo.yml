@@ -12,6 +12,13 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
 
+      - name: Verify Linked Issue
+        uses: hattan/verify-linked-issue-action@v1.1.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+        with:
+          message: 'Error! No linked issues'
+
       - name: Get linked issue
         uses: kin/gh-action-get-linked-issues@v1.0
         id: linked-issues

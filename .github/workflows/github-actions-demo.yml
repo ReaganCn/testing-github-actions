@@ -14,7 +14,7 @@ jobs:
 
       - name: Get linked issue
         uses: kin/gh-action-get-linked-issues@v1.0
-        id: inked-issues
+        id: linked-issues
         with:
           access-token: "${{ secrets.CROSS_REPO_TOKEN }}"
       

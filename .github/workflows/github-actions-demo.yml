@@ -19,6 +19,15 @@ jobs:
         with:
           message: 'Error! No linked issues'
 
+      - name: Get issues
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+
+      - name: Print linked issue numbers
+        run: echo ${{ steps.get-issues.outputs.issues }}
+
       - name: Get linked issue
         uses: kin/gh-action-get-linked-issues@v1.0
         id: linked-issues

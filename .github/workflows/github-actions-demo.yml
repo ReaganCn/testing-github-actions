@@ -1,0 +1,61 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on:
+  pull_request:
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      
+      - name: Hello world action step
+        id: hello
+        uses: ReaganCn/github-actions-quickstart@v1.2
+        with:
+          who-to-greet: 'Mona the Octocat'
+
+      - name: Verify Linked Issue
+        uses: hattan/verify-linked-issue-action@v1.1.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+        with:
+          message: 'Error! No linked issues'
+
+      - uses: nearform/github-action-check-linked-issues@v1
+        id: check-linked-issues
+        with:
+          github-token: ${{ secrets.CROSS_REPO_TOKEN }}
+          exclude-branches: "release/**, dependabot/**"
+      # OPTIONAL: Use the output from the `check-linked-issues` step
+      - name: Get the output
+        run: echo "How many linked issues? ${{ steps.check-linked-issues.outputs.issues }}"
+
+      - name: Get issues
+        id: get-issues
+        uses: mondeja/pr-linked-issues-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+
+      - name: Print linked issue numbers
+        run: echo ${{ steps.get-issues.outputs.issues }}
+
+      - name: Get linked issue
+        uses: kin/gh-action-get-linked-issues@v1.0
+        id: linked-issues
+        with:
+          access-token: "${{ secrets.CROSS_REPO_TOKEN }}"
+      
+      - run: echo "Linked issues ${{ steps.linked-issues.outputs.issues }}"
+
+      - run: echo "Testing"
+
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+      - run: echo "🍏 This job's status is ${{ job.status }}."
